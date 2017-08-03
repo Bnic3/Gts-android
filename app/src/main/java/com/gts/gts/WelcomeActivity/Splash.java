@@ -9,6 +9,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gts.gts.LoginActivity.Login2Activity;
+import com.gts.gts.LoginActivity.LoginActivity;
+import com.gts.gts.LoginActivity.LoginCustomActivity;
 import com.gts.gts.MainActivity;
 import com.gts.gts.R;
 
@@ -28,7 +31,8 @@ public class Splash extends AppCompatActivity {
         tv.startAnimation(myanim);
         iv.startAnimation(myanim);
 
-        final Intent i = new Intent(this, MainActivity.class);
+       /* final Intent i = new Intent(this, MainActivity.class);*/
+        final Intent i = new Intent(this, LoginCustomActivity.class);
         Thread splash = new Thread(){
             public void run(){
                 try{
@@ -42,5 +46,6 @@ public class Splash extends AppCompatActivity {
                 }
             }//end run
         };
+        splash.start();
     }
 }
