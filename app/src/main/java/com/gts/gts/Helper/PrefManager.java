@@ -107,4 +107,9 @@ public class PrefManager {
         editor.commit();
     }
 
+    public void clearSession() {
+        editor.clear();
+        editor.commit();
+    }
+
 }

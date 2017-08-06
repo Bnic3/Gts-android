@@ -90,7 +90,7 @@ public class FragmentTwo extends Fragment  {
         View v = inflater.inflate(R.layout.fragment_fragment_two, container, false);
 
         spinner = (Spinner) v.findViewById(R.id.codespinner);
-        phone = (EditText) v.findViewById(R.id.phoneEditText);
+        phone = (EditText) v.findViewById(R.id.poneEditText);
         loginBtn = (Button) v.findViewById(R.id.loginbtn);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
