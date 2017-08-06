@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gts.gts.LoginActivity.testActivity">
+
+    <TextView
+        android:id="@+id/userTV"
+        android:layout_width="95dp"
+        android:layout_height="23dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="@string/UserTV"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.659"
+        app:layout_constraintLeft_toRightOf="@+id/estateTV"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userBtn"
+        app:layout_constraintVertical_bias="0.07999998" />
+
+    <ImageButton
+        android:id="@+id/userBtn"
+        android:layout_width="100dp"
+        android:layout_height="105dp"
+        android:background="@drawable/estate_btn_click"
+        android:elevation="@dimen/fab_margin"
+        android:textAlignment="textStart"
+        app:srcCompat="@drawable/user"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.5"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.82" />
+
+    <ImageButton
+        android:id="@+id/estateBtn2"
+        android:layout_width="100dp"
+        android:layout_height="105dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/estate_btn_click"
+        android:elevation="@dimen/fab_margin"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.31"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/userBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.508"
+        app:srcCompat="@drawable/officewhite" />
+
+    <Button
+        android:id="@+id/button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="281dp"
+        android:layout_height="58dp"
+        android:background="@drawable/estate_btn_click"
+        android:elevation="@dimen/fab_margin"
+        android:text="Button"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/estateTV"
+        android:layout_width="95dp"
+        android:layout_height="23dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="17dp"
+        android:text="@string/EstateTV"
+        app:layout_constraintHorizontal_bias="0.14"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/estateBtn2" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gts.gts.LoginActivity.LoginCustomActivity2">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="162dp"
+
+        android:layout_height="41dp"
+        android:layout_marginTop="8dp"
+        android:padding="0dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:weightSum="1"
+        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/imageView"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+
+            android:layout_weight="0.10"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/houselogo"
+            tools:layout_editor_absoluteX="100dp" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="57dp"
+            android:layout_height="34dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="0.56"
+            android:text="@string/app_name"
+            android:textAppearance="@android:style/TextAppearance.Material.Large" />
+    </LinearLayout>
+
+
+    <com.gts.gts.Utility.CustomPager
+        android:id="@+id/pager2"
+        android:layout_width="356dp"
+        android:layout_height="507dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0">
+
+    </com.gts.gts.Utility.CustomPager>
+
+
+</android.support.constraint.ConstraintLayout>

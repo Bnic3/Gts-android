@@ -13,8 +13,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.customToolbar);
+
         setSupportActionBar(toolbar);
         int resId=MainActivity.this.getResources().getIdentifier("houselogo", "drawable", MainActivity.this.getPackageName());
+
         toolbar.setLogo(resId);
         toolbar.setTitle("  GTS");
     }

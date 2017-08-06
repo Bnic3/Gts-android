@@ -23,15 +23,9 @@
             android:name=".MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".LoginActivity.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".LoginActivity.Login2Activity"
-            android:label="@string/title_activity_login2"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".LoginActivity.LoginCustomActivity"></activity>
+        <activity android:name=".LoginActivity.LoginCustomActivity" />
+        <activity android:name=".LoginActivity.testActivity" />
+        <activity android:name=".LoginActivity.LoginCustomActivity2"></activity>
     </application>
 
 </manifest>

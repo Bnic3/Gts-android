@@ -4,19 +4,25 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.gts.gts.R;
 
+
+
 public class LoginCustomActivity extends AppCompatActivity implements View.OnClickListener {
 
+private Toolbar toolbar;
 
- private Button firstpage;
- private Button secondpage;
+    private ImageButton estatebtn;
+    private ImageButton userbtn;
     private ViewPager customPager;
     private ViewPagerAdapter pagerAdapter;
+
+
 
 
     @Override
@@ -24,12 +30,22 @@ public class LoginCustomActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_custom);
 
-        firstpage = (Button) findViewById(R.id.firstpagerBtn);
-        secondpage = (Button) findViewById(R.id.secondpagerBtn);
+        toolbar = (Toolbar) findViewById(R.id.customToolbar);
+        setSupportActionBar(toolbar);
+        int resId=LoginCustomActivity.this.getResources().getIdentifier("houselogo", "drawable",LoginCustomActivity.this.getPackageName());
+        toolbar.setLogo(resId);
+        toolbar.setTitle("  GTS");
+
+       /* firstpage = (Button) findViewById(R.id.firstpagerBtn);
+        secondpage = (Button) findViewById(R.id.secondpagerBtn);*/
+       estatebtn = (ImageButton) findViewById(R.id.estateBtn2);
+       userbtn = (ImageButton) findViewById(R.id.userBtn);
+
         customPager = (ViewPager) findViewById(R.id.customPagerContainer);
 
-        firstpage.setOnClickListener(this);
-        secondpage.setOnClickListener(this);
+
+        estatebtn.setOnClickListener(this);
+        userbtn.setOnClickListener(this);
 
 
         pagerAdapter = new ViewPagerAdapter();
@@ -38,12 +54,13 @@ public class LoginCustomActivity extends AppCompatActivity implements View.OnCli
 
 
 
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.firstpagerBtn:
+            case R.id.estateBtn2:
                customPager.setCurrentItem(2);
                 break;
 
