@@ -16,8 +16,9 @@
     <string name="resendTV">Didn\'t get OTP? Click to resend</string>
     <string name="phonehint">Enter Number</string>
     <string name="estateid">Estate ID:</string>
-    <string name="estatelabel">Estate Name: </string>
-    <string name="emailLabel">Admin Email:</string>
+    <string name="estatelabel">Estate Name </string>
+    <string name="emailLabel">Admin Email</string>
     <string name="signup">Signup</string>
+    <string name="countrycode">Select Country Code</string>
 
 </resources>

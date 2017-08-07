@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.gts.gts.R;
 import com.vstechlab.easyfonts.EasyFonts;
 
-public class LoginCustomActivity2 extends FragmentActivity implements FragmentOne.OnFragmentInteractionListener, FragmentTwo.OnFragmentInteractionListener, FragmentThree.OnFragmentInteractionListener {
+public class LoginCustomActivity2 extends FragmentActivity implements FragmentOne.OnFragmentInteractionListener, FragmentTwo.OnFragmentInteractionListener, FragmentThree.OnFragmentInteractionListener, FragmentFour.OnFragmentInteractionListener {
 
     ViewPager vp;
     private static String TAG = LoginCustomActivity2.class.getSimpleName();
@@ -42,7 +42,7 @@ public class LoginCustomActivity2 extends FragmentActivity implements FragmentOn
     @Override
     public void onFragmentInteraction(int value) {
         Log.i("JOHNNY", String.valueOf(value));
-        vp.setCurrentItem(1);
+        vp.setCurrentItem(value);
 
     }
 
@@ -55,6 +55,10 @@ public class LoginCustomActivity2 extends FragmentActivity implements FragmentOn
 
     @Override
     public void onFragmentInteraction3(Uri uri) {
+
+    }
+    @Override
+    public void onFragmentInteraction4(int value) {
 
     }
 }

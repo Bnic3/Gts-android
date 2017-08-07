@@ -95,28 +95,27 @@ public class FragmentTwo extends Fragment  {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*String selection = spinner.getSelectedItem().toString();
-               int pos = spinner.getSelectedItemPosition();*/
-                //Todo: validate input;
-                String s= phone.getText().toString();
 
-                if(s.length()== 0){
-                    Toast.makeText(getActivity(), "Please enter your phone number", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else{
-                    s = sanitizePhone(s);
-                    Log.i(TAG, "Navigate to OTP");
-                }
+                    //Todo: validate input;
+                    String s= phone.getText().toString();
+
+                    if(s.length()== 0){
+                        Toast.makeText(getActivity(), "Please enter your phone number", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    else{
+                        s = sanitizePhone(s);
+                        Log.i(TAG, "Navigate to OTP");
+                    }
 
 
-                Log.i(TAG, "SELECTION: " +current_dial_codes);
-                Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+                    Log.i(TAG, "SELECTION: " +current_dial_codes);
+                    Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
 
             }
         });
 
-        spinner.setSelection(132);
+        spinner.setSelection(0);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

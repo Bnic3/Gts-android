@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#000</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#D32F2F</color>
+    <!--<color name="colorAccent">#FF4081</color>-->
 
     <color name="darkred">#D32F2F</color>
     <color name="darklight">#F44336</color>

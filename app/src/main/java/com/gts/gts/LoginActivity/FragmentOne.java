@@ -102,17 +102,15 @@ public class FragmentOne extends Fragment {
                 mListener.onFragmentInteraction(1);
             }
         });
-        
 
-        /*fragonebutton= (Button) v.findViewById(R.id.fragOneBtn);
-
-        fragonebutton.setOnClickListener(new View.OnClickListener() {
+        estatebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onFragmentInteraction(1);
+                mListener.onFragmentInteraction(3);
             }
-        });*/
-        // Inflate the layout for this fragment
+        });
+        
+
         return v;
     }
 
