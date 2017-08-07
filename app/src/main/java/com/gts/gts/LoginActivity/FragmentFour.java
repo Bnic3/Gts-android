@@ -3,16 +3,21 @@ package com.gts.gts.LoginActivity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.gts.gts.R;
 
@@ -30,18 +35,26 @@ import java.util.ArrayList;
  * to handle interaction events.
  */
 public class FragmentFour extends Fragment {
-    private static String TAG = LoginCustomActivity2.class.getSimpleName();
+    private static String TAG = "GTS";
 
+    private Vibrator vib;
+    public Animation animShake;
     private OnFragmentInteractionListener mListener;
     public Spinner codeSpinner;
     public Button signupBtn;
 
     public ArrayList<String> dial_codes;
-    public EditText adminphone;
-    public EditText ename;
-    public EditText adminEmail;
+    public EditText adminphone, ename, adminEmail;
+    public TextInputLayout nameLayout, emailLayout,phoneLayout;
+
 
     public String current_dial_codes;
+
+
+    // editText Strings
+    public String nameTxt;
+    public String phoneTxt;
+    public String emailText;
 
 
 
@@ -62,13 +75,14 @@ public class FragmentFour extends Fragment {
         adminphone = (EditText) v.findViewById(R.id.adminPhone);
         adminEmail = (EditText) v.findViewById(R.id.emailEditText);
 
-        signupBtn.setOnClickListener(new View.OnClickListener(){
+        nameLayout = (TextInputLayout) v.findViewById(R.id.estateInputLayout);
+        emailLayout = (TextInputLayout) v.findViewById(R.id.emailInputLayout);
+        phoneLayout = (TextInputLayout) v.findViewById(R.id.phoneInputLayout);
 
-            @Override
-            public void onClick(View v) {
+        animShake= AnimationUtils.loadAnimation(getActivity(),R.anim.shake);
+        vib = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
-            }
-        });
+
 
         codeSpinner.setSelection(0);
         codeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -88,25 +102,121 @@ public class FragmentFour extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_layout, R.id.spinnertext,items );
         codeSpinner.setAdapter(adapter);
 
+        signupBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                validateForm();
+            }
+        });
+
+
+
 
         return v;
     }
 
+    public void getEditTexts(){
+        nameTxt = ename.getText().toString().trim();
+        phoneTxt = sanitizePhone(adminphone.getText().toString().trim());
+        emailText = adminEmail.getText().toString().trim();
+    }
     public void validateForm(){
-        String nameTxt = ename.getText().toString().trim();
-        String phoneTxt = sanitizePhone(adminphone.getText().toString().trim());
-        String adminEmail ;
+     getEditTexts();
+        if (!checkName()){
+            ename.setAnimation(animShake);
+            ename.startAnimation(animShake);
+            vib.vibrate(120);
+            Log.i(TAG, "name is " +nameTxt);
+            return;
+        }
+
+        if(!checkEmail()){
+            adminEmail.setAnimation(animShake);
+            adminEmail.startAnimation(animShake);
+            vib.vibrate(120);
+            Log.i(TAG, "email is " +emailText);
+            return;
+        }
+
+        if(!checkPhone()){
+            adminphone.setAnimation(animShake);
+            adminphone.startAnimation(animShake);
+            vib.vibrate(120);
+            Log.i(TAG, " i am in check phone is " +phoneTxt);
+
+            return;
+        }
+        Log.i(TAG, "phone is " +phoneTxt);
+        nameLayout.setErrorEnabled(false);
+        emailLayout.setErrorEnabled(false);
+        phoneLayout.setErrorEnabled(false);
+        Toast.makeText(getActivity(), "You have been Validated", Toast.LENGTH_SHORT).show();
     }
 
-    public String sanitizePhone(String phone){
-        String phoneText = phone.trim();
+    private boolean checkName(){
+        if(nameTxt.isEmpty()|| nameTxt.length()<=2){
+            nameLayout.setErrorEnabled(true);
+            nameLayout.setError("Please Enter a Name");
+            ename.setError("Valid Input Required");
+            Log.i(TAG, "iam in  name empty");
+            return false;
 
-        if (String.valueOf(phoneText.charAt(0)).equals("0")){
-            phoneText = phoneText.substring(1,phoneText.length());
-            Log.i(TAG, "sanitizing");
         }
-        phoneText= current_dial_codes+phoneText;
-        return phoneText;
+        else {
+            nameLayout.setErrorEnabled(false);
+            return true;
+        }
+
+    }
+
+    private boolean checkEmail(){
+        String regEx = "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$";
+        if(!emailText.isEmpty() && emailText.matches(regEx)){
+            emailLayout.setErrorEnabled(false);
+             return true;
+
+        }
+        else {
+            emailLayout.setErrorEnabled(true);
+            emailLayout.setError("Please Enter an Email");
+            adminEmail.setError("Valid Input Required");
+            return false;
+        }
+
+    }
+
+    private boolean checkPhone(){
+        if(phoneTxt.isEmpty() ){
+            phoneLayout.setErrorEnabled(true);
+            phoneLayout.setError("Please Enter a Number");
+            adminphone.setError("Valid Input Required");
+            return false;
+           /* */
+        }else if(phoneTxt.length()<=5){
+            phoneLayout.setErrorEnabled(true);
+            phoneLayout.setError("Please Enter a Number");
+            adminphone.setError("Valid Input Required");
+            return false;
+        }
+        else {
+            phoneLayout.setErrorEnabled(false);
+            return true;
+        }
+    }
+    public String sanitizePhone(String mobile){
+        /*if (mobile.isEmpty()){
+            return "";
+        }
+        else*/ if(!mobile.isEmpty() && String.valueOf(mobile.charAt(0)).equals("0")) {
+            mobile = mobile.substring(1,mobile.length());
+            Log.i(TAG, "sanitizing");
+            mobile= current_dial_codes+mobile;
+
+        } else{ mobile= current_dial_codes+mobile;}
+
+
+        return mobile;
     }
 
     public  ArrayList<String> getCountries(String fileName){
