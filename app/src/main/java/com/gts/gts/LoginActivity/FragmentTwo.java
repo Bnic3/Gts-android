@@ -3,11 +3,14 @@ package com.gts.gts.LoginActivity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,7 +36,10 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class FragmentTwo extends Fragment  {
-    private static String TAG = LoginCustomActivity2.class.getSimpleName();
+    private static String TAG = "GTS";
+
+    private Vibrator vib;
+    public Animation animShake;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -42,7 +48,7 @@ public class FragmentTwo extends Fragment  {
     public Spinner spinner;
     public Button loginBtn;
     public  ArrayList<String> dial_codes;
-    public EditText phone;
+    public EditText phone,eid;
 
     public String current_dial_codes;
 
@@ -91,25 +97,43 @@ public class FragmentTwo extends Fragment  {
 
         spinner = (Spinner) v.findViewById(R.id.codespinner);
         phone = (EditText) v.findViewById(R.id.poneEditText);
+        eid = (EditText) v.findViewById(R.id.eidEditText);
+
         loginBtn = (Button) v.findViewById(R.id.loginbtn);
+        animShake= AnimationUtils.loadAnimation(getActivity(),R.anim.shake);
+        vib = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                     //Todo: validate input;
-                    String s= phone.getText().toString();
+                    String s= "";
+                if(!checkPhone()) {
+                    shakeField(phone);
+                    return;
 
-                    if(s.length()== 0){
+                }else{
+                    s = sanitizePhone(phone.getText().toString());
+                }
+                if(eid.getText().toString().isEmpty()){
+                    eid.setError("Please provide an Estate ID");
+                    shakeField(eid);
+                    return;
+                }
+
+
+                    /*if(s.length()== 0){
                         Toast.makeText(getActivity(), "Please enter your phone number", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     else{
                         s = sanitizePhone(s);
                         Log.i(TAG, "Navigate to OTP");
-                    }
+                    }*/
 
 
-                    Log.i(TAG, "SELECTION: " +current_dial_codes);
+                    /*Log.i(TAG, "SELECTION: " +current_dial_codes);*/
                     Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
 
             }
@@ -137,6 +161,28 @@ public class FragmentTwo extends Fragment  {
         return v;
     }
 
+    public void shakeField(EditText et){
+        et.setAnimation(animShake);
+        et.startAnimation(animShake);
+        vib.vibrate(120);
+
+    };
+
+    private boolean checkPhone(){
+        if(phone.getText().toString().isEmpty() ){
+            phone.setError("Please enter a number");
+            return false;
+           /* */
+        }else if(phone.getText().toString().length()<=5){
+            phone.setError("The input is too short");
+
+            return false;
+        }
+        else {
+
+            return true;
+        }
+    }
     public String sanitizePhone(String phone){
         String phoneText = phone.trim();
 
@@ -145,7 +191,7 @@ public class FragmentTwo extends Fragment  {
             Log.i(TAG, "sanitizing");
         }
         phoneText= current_dial_codes+phoneText;
-        return phoneText;
+        return phoneText.trim();
     }
 
 
