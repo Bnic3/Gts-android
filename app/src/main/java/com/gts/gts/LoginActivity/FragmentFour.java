@@ -19,10 +19,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.gts.gts.NetworkRequests.SignupRequest;
 import com.gts.gts.R;
+import com.gts.gts.Utility.RequestSingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -152,7 +157,41 @@ public class FragmentFour extends Fragment {
         emailLayout.setErrorEnabled(false);
         phoneLayout.setErrorEnabled(false);
         Toast.makeText(getActivity(), "You have been Validated", Toast.LENGTH_SHORT).show();
+        //Todo: communicate to server
+        signUp();
     }
+
+    public void signUp(){
+        getEditTexts();
+        Log.i(TAG, "i am in signup");
+        Response.Listener<String> successListener= new Response.Listener<String>(){
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    boolean success = jsonResponse.getBoolean("success");
+                    String message = jsonResponse.getString("message");
+                    Log.i(TAG, "Success Status: "+ success);
+                    Log.i(TAG, "Messaage Status: "+ message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };//end of listener
+
+        Response.ErrorListener failureListener  = new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "Network issues: cannot reach server");
+                Log.e(TAG, error.toString());
+            }
+        };
+
+                SignupRequest request = new SignupRequest(nameTxt,phoneTxt,emailText,successListener, failureListener);
+        RequestSingleton.getmInstance(getActivity()).addToRequestQueue(request);
+
+    }
+
 
     private boolean checkName(){
         if(nameTxt.isEmpty()|| nameTxt.length()<=2){
