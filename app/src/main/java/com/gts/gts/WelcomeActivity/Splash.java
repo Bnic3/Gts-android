@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.gts.gts.LoginActivity.LoginCustomActivity;
 import com.gts.gts.LoginActivity.LoginCustomActivity2;
 import com.gts.gts.LoginActivity.testActivity;
+import com.gts.gts.MainActivity;
 import com.gts.gts.R;
 
 public class Splash extends AppCompatActivity {
@@ -31,7 +32,8 @@ public class Splash extends AppCompatActivity {
         iv.startAnimation(myanim);
 
         final Intent ii = new Intent(this, testActivity.class);
-        final Intent i = new Intent(this, LoginCustomActivity.class);
+        //
+        final Intent iv = new Intent(this, MainActivity.class);
         final Intent iii = new Intent(this, LoginCustomActivity2.class);
         Thread splash = new Thread(){
             public void run(){
@@ -41,7 +43,7 @@ public class Splash extends AppCompatActivity {
                  catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    startActivity(iii);
+                    startActivity(iii);  //iii
                     finish();
                 }
             }//end run

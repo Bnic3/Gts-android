@@ -48,10 +48,10 @@ public class LoginCustomActivity2 extends FragmentActivity implements FragmentOn
 
 
 
-    @Override
-    public void onFragmentInteraction2(Uri uri) {
+   /* @Override
+    public void onFragmentInteraction2(int value) {
 
-    }
+    }*/
 
     @Override
     public void onFragmentInteraction3(Uri uri) {

@@ -28,6 +28,7 @@ public class PrefManager {
 
     private static final String KEY_PHONE = "mobile_number";
     private static final String KEY_NAME = "name";
+    private static final String KEY_ENAME = "ename";
     private static final String KEY_DIAL_CODE = "dial_code";
     private static final String KEY_ROLE = "role";
     private static final String KEY_EID = "eid";
@@ -35,6 +36,10 @@ public class PrefManager {
 
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     private static final String KEY_IS_WAITING_FOR_SMS = "IsWaitingForSms";
+
+    public static final String ADMIN = "admin";
+    public static final String USER = "user";
+
 
     public PrefManager(Context context) {
         this._context = context;
@@ -51,6 +56,16 @@ public class PrefManager {
         editor.putString(KEY_NAME, name);
         editor.commit();
     }
+
+    public  String getEname() {
+        return pref.getString(KEY_ENAME, "");
+    }
+
+    public void setEname(String name) {
+        editor.putString(KEY_ENAME, name);
+        editor.commit();
+    }
+
 
 
     public String getPhone() {

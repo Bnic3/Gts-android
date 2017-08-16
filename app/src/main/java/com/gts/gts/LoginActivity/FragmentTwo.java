@@ -1,5 +1,6 @@
 package com.gts.gts.LoginActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,10 +19,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.gts.gts.Helper.PrefManager;
+import com.gts.gts.NetworkRequests.LoginRequest;
 import com.gts.gts.R;
+import com.gts.gts.Utility.CustomUtility;
+import com.gts.gts.Utility.RequestSingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +49,8 @@ public class FragmentTwo extends Fragment  {
 
     private Vibrator vib;
     public Animation animShake;
+    public ProgressDialog pd;
+    public PrefManager pref;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -49,6 +60,7 @@ public class FragmentTwo extends Fragment  {
     public Button loginBtn;
     public  ArrayList<String> dial_codes;
     public EditText phone,eid;
+    public String eidText, phoneText;
 
     public String current_dial_codes;
 
@@ -102,6 +114,8 @@ public class FragmentTwo extends Fragment  {
         loginBtn = (Button) v.findViewById(R.id.loginbtn);
         animShake= AnimationUtils.loadAnimation(getActivity(),R.anim.shake);
         vib = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        pd = new ProgressDialog(getActivity());
+        pref = new PrefManager(getActivity());
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +129,7 @@ public class FragmentTwo extends Fragment  {
 
                 }else{
                     s = sanitizePhone(phone.getText().toString());
+                    phoneText= s;
                 }
                 if(eid.getText().toString().isEmpty()){
                     eid.setError("Please provide an Estate ID");
@@ -122,19 +137,8 @@ public class FragmentTwo extends Fragment  {
                     return;
                 }
 
-
-                    /*if(s.length()== 0){
-                        Toast.makeText(getActivity(), "Please enter your phone number", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    else{
-                        s = sanitizePhone(s);
-                        Log.i(TAG, "Navigate to OTP");
-                    }*/
-
-
-                    /*Log.i(TAG, "SELECTION: " +current_dial_codes);*/
-                    Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+                    /*Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();*/
+                    login();
 
             }
         });
@@ -159,6 +163,87 @@ public class FragmentTwo extends Fragment  {
 
 
         return v;
+    }
+
+    public void login(){
+        CustomUtility.PROGRESSDIALOG(pd,"Login");
+        Log.i(TAG, "i am in login function");
+
+        Response.Listener<String> successListener= new Response.Listener<String>(){
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    boolean success = jsonResponse.getBoolean("success");
+                    String message = jsonResponse.getString("message");
+                    Log.i(TAG, "Success Status: "+ success);
+                    Log.i(TAG, "Message Status: "+ message);
+                    Log.i(TAG, "userinput Phone: "+ phoneText);
+                    Log.i(TAG, "Userinput eid: "+ eidText);
+
+                    // TODO: 8/11/2017  login condition
+                    pd.dismiss();
+                    if(success){
+                        // save response info
+                        pref.setDialCode(current_dial_codes);
+                        pref.setEid(eidText);
+                        pref.setPhone(phoneText);
+
+                    // navigate to otp fragment
+                        mListener.onFragmentInteraction(2);
+                    }
+
+                    else {
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+
+                    }
+
+                   /* pd.dismiss();*/
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };//end of listener
+
+
+        Response.ErrorListener failureListener  = new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                vib.vibrate(120);
+                Log.i(TAG, "Network issues: cannot reach server");
+                Log.e(TAG, error.toString());
+                pd.dismiss();
+                String json = null;
+
+                NetworkResponse response = error.networkResponse;
+                if(response != null && response.data != null){
+                    switch(response.statusCode){
+                        case 401:
+                            json = new String(response.data);
+                            json = CustomUtility.trimMessage(json, "message");
+                            if(json != null) displayMessage(json);
+                            break;
+                    }
+                    //Additional cases
+                }
+            }
+
+
+
+        }; //end error listener
+        getEditText();
+        LoginRequest request = new LoginRequest(eidText,phoneText,successListener,failureListener);
+        RequestSingleton.getmInstance(getActivity()).addToRequestQueue(request);
+
+    }
+
+    public void getEditText(){
+        eidText = eid.getText().toString().trim();
+
+    }
+
+    public void displayMessage(String toastString){
+        Toast.makeText(getActivity(), toastString, Toast.LENGTH_LONG).show();
     }
 
     public void shakeField(EditText et){
@@ -233,9 +318,9 @@ public class FragmentTwo extends Fragment  {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(int value) {
         if (mListener != null) {
-            mListener.onFragmentInteraction2(uri);
+            mListener.onFragmentInteraction(value);
         }
     }
 
@@ -270,6 +355,6 @@ public class FragmentTwo extends Fragment  {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction2(Uri uri);
+        void onFragmentInteraction(int value);
     }
 }

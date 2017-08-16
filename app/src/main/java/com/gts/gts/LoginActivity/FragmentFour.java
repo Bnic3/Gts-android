@@ -1,6 +1,8 @@
 package com.gts.gts.LoginActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -19,10 +21,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.gts.gts.Helper.PrefManager;
+import com.gts.gts.MainActivity;
 import com.gts.gts.NetworkRequests.SignupRequest;
 import com.gts.gts.R;
+import com.gts.gts.Utility.CustomUtility;
 import com.gts.gts.Utility.RequestSingleton;
 
 import org.json.JSONArray;
@@ -33,6 +41,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -42,11 +52,16 @@ import java.util.ArrayList;
 public class FragmentFour extends Fragment {
     private static String TAG = "GTS";
 
+    private PrefManager pref;
+
+
+
     private Vibrator vib;
     public Animation animShake;
     private OnFragmentInteractionListener mListener;
     public Spinner codeSpinner;
     public Button signupBtn;
+    public ProgressDialog pd;
 
     public ArrayList<String> dial_codes;
     public EditText adminphone, ename, adminEmail;
@@ -86,6 +101,8 @@ public class FragmentFour extends Fragment {
 
         animShake= AnimationUtils.loadAnimation(getActivity(),R.anim.shake);
         vib = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        pd = new ProgressDialog(getActivity());
+        pref = new PrefManager(getActivity());
 
 
 
@@ -152,27 +169,50 @@ public class FragmentFour extends Fragment {
 
             return;
         }
-        Log.i(TAG, "phone is " +phoneTxt);
+        /*Log.i(TAG, "phone is " +phoneTxt);*/
         nameLayout.setErrorEnabled(false);
         emailLayout.setErrorEnabled(false);
         phoneLayout.setErrorEnabled(false);
-        Toast.makeText(getActivity(), "You have been Validated", Toast.LENGTH_SHORT).show();
+      /*  Toast.makeText(getActivity(), "You have been Validated", Toast.LENGTH_SHORT).show();*/
         //Todo: communicate to server
         signUp();
     }
 
     public void signUp(){
+        CustomUtility.PROGRESSDIALOG(pd,"Estate Signup");
         getEditTexts();
         Log.i(TAG, "i am in signup");
         Response.Listener<String> successListener= new Response.Listener<String>(){
             @Override
             public void onResponse(String response) {
+
+
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
                     boolean success = jsonResponse.getBoolean("success");
                     String message = jsonResponse.getString("message");
+                    String eid = jsonResponse.getString("data");
+
+
+                    Log.i(TAG, "eid: "+ eid);
                     Log.i(TAG, "Success Status: "+ success);
                     Log.i(TAG, "Messaage Status: "+ message);
+                    if(success){
+                        pref.setDialCode(current_dial_codes);
+                        //pref.setEid(phoneTxt); at this point no eid
+                        //Todo: communicate EID to user
+                        pref.setPhone(phoneTxt);
+                        pref.setRole(PrefManager.ADMIN);
+                        pref.setEid(eid);
+                        pref.setEname(nameTxt);
+                        pref.setIsLoggedIn(true);
+                        //navigate to main app
+                        Intent i = new Intent(getActivity(), MainActivity.class);
+                        startActivity(i);
+
+                    }
+
+                    pd.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -182,10 +222,37 @@ public class FragmentFour extends Fragment {
         Response.ErrorListener failureListener  = new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error) {
+                vib.vibrate(120);
                 Log.i(TAG, "Network issues: cannot reach server");
                 Log.e(TAG, error.toString());
+                pd.dismiss();
+
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getActivity(),
+                            "Please check your network connection",
+                            Toast.LENGTH_LONG).show();
+                }
+
+                String json = null;
+
+                NetworkResponse response = error.networkResponse;
+                if(response != null && response.data != null){
+                    switch(response.statusCode){
+                        case 401:
+                            json = new String(response.data);
+                            json = CustomUtility.trimMessage(json, "message");
+                            if(json != null) displayMessage(json);
+                            break;
+                    }
+                    //Additional cases
+                }
             }
-        };
+
+            public void displayMessage(String toastString){
+                Toast.makeText(getActivity(), toastString, Toast.LENGTH_LONG).show();
+            }
+
+        };//end error listener
 
                 SignupRequest request = new SignupRequest(nameTxt,phoneTxt,emailText,successListener, failureListener);
         RequestSingleton.getmInstance(getActivity()).addToRequestQueue(request);
